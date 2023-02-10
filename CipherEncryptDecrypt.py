@@ -6,6 +6,7 @@ __version__     = "1.0.0"
 
 import string
 import os
+import random
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
@@ -13,17 +14,45 @@ def decrypt(encryptedFile):
     # TODO: add body of decrypt(file)
     key = get_key()
 
-    file2 = open(f"plaintext_{encryptedFile}", "w")
+    file2 = open(f"decoded_{encryptedFile}", "w")
     with open(encryptedFile) as file:
         for line in file:
             line = line.translate(str.maketrans(key, alphabet))
             file2.write(line)
     file2.close()
-    print(f"\nDecrypted file created as 'plaintext_{encryptedFile}'")     
+    print(f"\nDecrypted file created as 'decoded_{encryptedFile}'")     
     
-def encrypt(file):
-    # TODO: add body of encrypt(file)
-    print("encrypted file")     # stub code
+def encrypt(plain_file):
+    plaintextFile = make_plaintext(plain_file)
+    list = random.sample(alphabet, len(alphabet))
+    key = ''.join(list)
+    
+    keyFile = open(f"key_{plain_file}", "w")
+    keyFile.write(key)
+    print(f"Key stored in 'key_{plain_file}'")
+    
+    encryptedFile = open(f"ciphertext_{plain_file}", "w")
+    with open(plaintextFile) as file:
+        for line in file:
+            line = line.translate(str.maketrans(alphabet, key))
+        encryptedFile.write(line)
+    print(f"\nEncrypted file created as 'ciphertext_{plaintextFile}'")
+    
+    encryptedFile.close()
+    keyFile.close()
+
+def make_plaintext(raw_file):
+    plain_file_name = f"plaintext_{raw_file}"
+    plain = open(plain_file_name, "w")
+    with open(raw_file) as file:
+        for line in file:
+            line = line.lower()
+            line = line.translate(str.maketrans('','', string.punctuation))
+            plain.write(line)
+    plain.close()
+    
+    print(f"Plaintext version of .txt file created as 'plaintext_{raw_file}'")
+    return plain_file_name
 
 def get_key():
     more = True
