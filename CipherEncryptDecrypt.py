@@ -13,7 +13,7 @@ alphabet = 'abcdefghijklmnopqrstuvwxyz'
 def decrypt(encryptedFile):    
     # TODO: add body of decrypt(file)
     key = get_key()
-
+    
     file2 = open(f"decoded_{encryptedFile}", "w")
     with open(encryptedFile) as file:
         for line in file:
