@@ -9,16 +9,17 @@ import os
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
-def decrypt(fileName):    
+def decrypt(encryptedFile):    
     # TODO: add body of decrypt(file)
     key = get_key()
-    file2 = get_new_file_name()
-    with open(fileName) as file:
+
+    file2 = open(f"plaintext_{encryptedFile}", "w")
+    with open(encryptedFile) as file:
         for line in file:
-            line = line.translate(str.maketrans(alphabet, key))
+            line = line.translate(str.maketrans(key, alphabet))
             file2.write(line)
     file2.close()
-    print("decrypted file")     # stub code
+    print(f"\nDecrypted file created as 'plaintext_{encryptedFile}'")     
     
 def encrypt(file):
     # TODO: add body of encrypt(file)
@@ -37,12 +38,7 @@ def get_key():
             continue
     return key
 
-def get_new_file_name():
-    # TODO: add body of get_new_file_name()
-    print("new file name")      # stub code
-
 def decrypt_or_encrypt(choice, file):
-    print(choice)
     match choice:
         case 'D': 
             decrypt(file)
@@ -54,7 +50,6 @@ def decrypt_or_encrypt(choice, file):
             raise ValueError(f"ERROR: Command '{choice}' not recognized. Format is capital D or E or !QUIT\n")
             
 def get_text_file_name():
-    # TODO: split this method into 2. One to check .txt file ending and another to see if it is in file
     print("To Exit, type !QUIT")
     file = input("Enter a .txt file to encrypt/decrypt: \n")
     
