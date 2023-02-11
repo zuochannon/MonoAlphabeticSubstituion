@@ -38,34 +38,36 @@ import random
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
-def decrypt(encrypted_file):    
+
+def decrypt(encrypted_file):
     """ Decodes an encrypted plaintext .txt file 
-    
+
     Calls get_key() to retrieve cipher key
-    
+
     Creates .txt file that starts with 'decoded_' and reads from 
     filename given by parameter. Replaces ciphertext with letters from 
     key and writes to 'decoded_' .txt file
-    
+
     Args:
         encrypted_file (str): Name of encrypted .txt file
     """
-    
+
     key = get_key()
-    
+
     file2 = open(f"decoded_{encrypted_file}", "w")
     with open(encrypted_file) as file:
         for line in file:
             line = line.translate(str.maketrans(key, alphabet))
             file2.write(line)
     file2.close()
-    print(f"\nDecrypted file created as 'decoded_{encrypted_file}'")     
-    
+    print(f"\nDecrypted file created as 'decoded_{encrypted_file}'")
+
+
 def encrypt(plain_file):
     """ Encrypts a plaintext .txt file
-    
+
     Calls make_plainttext(filename) to create a plaintext .txt file
-    
+
     Creates .txt file that starts with 'ciphertext_'. Generates a random
     26-character key. Replaces plaintext with letters from the key and 
     writes to 'ciphertext_' .txt file
@@ -73,53 +75,55 @@ def encrypt(plain_file):
     Args:
         plain_file (str): Name of plaintext .txt file
     """
-    
+
     plaintext_file = make_plaintext(plain_file)
     list = random.sample(alphabet, len(alphabet))
     key = ''.join(list)
-    
+
     key_file = open(f"key_{plain_file}", "w")
     key_file.write(key)
     print(f"Key stored in 'key_{plain_file}'")
-    
+
     encrypted_file = open(f"ciphertext_{plain_file}", "w")
     with open(plaintext_file) as file:
         for line in file:
             line = line.translate(str.maketrans(alphabet, key))
         encrypted_file.write(line)
     print(f"\nEncrypted file created as 'ciphertext_{plaintext_file}'")
-    
+
     encrypted_file.close()
     key_file.close()
 
+
 def make_plaintext(rich_text):
     """ Turns a .txt file to a plaintext file
-    
+
     Creates a plaintext version of the user's .txt file by replacing 
     uppercase letters with lowercase letters and removing all punctuation.
-    
+
     Args:
         rich_text (str): User's filename input
 
     Returns:
         str: Name of newly created .txt file
     """
-    
+
     plain_file_name = f"plaintext_{rich_text}"
     plain = open(plain_file_name, "w")
     with open(rich_text) as file:
         for line in file:
             line = line.lower()
-            line = line.translate(str.maketrans('','', string.punctuation))
+            line = line.translate(str.maketrans('', '', string.punctuation))
             plain.write(line)
     plain.close()
-    
+
     print(f"Plaintext version of .txt file created as 'plaintext_{rich_text}'")
     return plain_file_name
 
+
 def get_key():
     """ Gets encryption key from user
-    
+
     Prompts user to input a 26-character key that acts as the substitution alphabet
 
     Raises:
@@ -128,18 +132,20 @@ def get_key():
     Returns:
         str: Key for decoding ciphertext
     """
-    
+
     more = True
-    while(more):
+    while (more):
         try:
             key = input("Type in your 26 letter key: \n")
             if len(key) != 26:
-                raise ValueError(f"ERROR: Length of '{key}' is {len(key)}. It should be 26 characters long.\n")
+                raise ValueError(
+                    f"ERROR: Length of '{key}' is {len(key)}. It should be 26 characters long.\n")
             more = False
         except ValueError as e:
             print(e)
             continue
     return key
+
 
 def decrypt_or_encrypt(choice, file):
     """ 'D' to decrypt, 'E' to encrypt, '!QUIT' to exit program
@@ -151,17 +157,19 @@ def decrypt_or_encrypt(choice, file):
     Raises:
         ValueError: If input isn't 'D', 'E', or '!QUIT'
     """
-    
+
     match choice:
-        case 'D': 
+        case 'D':
             decrypt(file)
         case'E':
             encrypt(file)
         case'!QUIT':
-            quit()    
+            quit()
         case _:
-            raise ValueError(f"ERROR: Command '{choice}' not recognized. Format is capital D or E or !QUIT\n")
-            
+            raise ValueError(
+                f"ERROR: Command '{choice}' not recognized. Format is capital D or E or !QUIT\n")
+
+
 def get_text_file_name():
     """ Makes sure filename is a .txt file and in current directory
 
@@ -172,20 +180,22 @@ def get_text_file_name():
     Returns:
         str: valid filename
     """
-    
+
     print("To Exit, type !QUIT")
     file = input("Enter a .txt file to encrypt/decrypt: \n")
-    
+
     if file == "!QUIT":
         quit()
-        
+
     if not file.endswith(".txt"):
         raise ValueError("ERROR: .txt file extension not found\n")
-    
+
     if not os.path.isfile(file):
-        raise FileNotFoundError(f"ERROR: {file} is not found in {os.getcwd()}\n")
-    
+        raise FileNotFoundError(
+            f"ERROR: {file} is not found in {os.getcwd()}\n")
+
     return file
+
 
 """
 START OF MAIN METHOD
@@ -203,9 +213,10 @@ if __name__ == "__main__":
     print()
     more = True
     while (more):
-        try:  
+        try:
             print("To Exit, type !QUIT")
-            choice = input("Do you want to [D]ecrypt or [E]ncrypt this file?: ")    
+            choice = input(
+                "Do you want to [D]ecrypt or [E]ncrypt this file?: ")
             decrypt_or_encrypt(choice, file)
             more = False
         except ValueError as e:
