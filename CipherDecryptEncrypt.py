@@ -21,9 +21,6 @@ This file contains the following functions:
     * get_text_file_name - checks if filename is (.txt) file and in
                            current directory
     * main - main function of script
-
-Returns:
-    _type_: _description_
 """
 
 __author__ = "Channon Zuo"
