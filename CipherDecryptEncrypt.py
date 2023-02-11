@@ -26,11 +26,11 @@ Returns:
     _type_: _description_
 """
 
-__author__      = "Channon Zuo"
-__email__       = "01channonzuo@gmail.com"
-__published__   = "02/10/19"
-__updated__     = "02/10/19"
-__version__     = "1.0.0"
+__author__ = "Channon Zuo"
+__email__ = "01channonzuo@gmail.com"
+__published__ = "02/10/19"
+__updated__ = "02/10/19"
+__version__ = "1.0.0"
 
 import string
 import os
@@ -38,7 +38,7 @@ import random
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
-def decrypt(encryptedFile):    
+def decrypt(encrypted_file):    
     """ Decodes an encrypted plaintext .txt file 
     
     Calls get_key() to retrieve cipher key
@@ -48,18 +48,18 @@ def decrypt(encryptedFile):
     key and writes to 'decoded_' .txt file
     
     Args:
-        encryptedFile (str): Name of encrypted .txt file
+        encrypted_file (str): Name of encrypted .txt file
     """
     
     key = get_key()
     
-    file2 = open(f"decoded_{encryptedFile}", "w")
-    with open(encryptedFile) as file:
+    file2 = open(f"decoded_{encrypted_file}", "w")
+    with open(encrypted_file) as file:
         for line in file:
             line = line.translate(str.maketrans(key, alphabet))
             file2.write(line)
     file2.close()
-    print(f"\nDecrypted file created as 'decoded_{encryptedFile}'")     
+    print(f"\nDecrypted file created as 'decoded_{encrypted_file}'")     
     
 def encrypt(plain_file):
     """ Encrypts a plaintext .txt file
@@ -74,23 +74,23 @@ def encrypt(plain_file):
         plain_file (str): Name of plaintext .txt file
     """
     
-    plaintextFile = make_plaintext(plain_file)
+    plaintext_file = make_plaintext(plain_file)
     list = random.sample(alphabet, len(alphabet))
     key = ''.join(list)
     
-    keyFile = open(f"key_{plain_file}", "w")
-    keyFile.write(key)
+    key_file = open(f"key_{plain_file}", "w")
+    key_file.write(key)
     print(f"Key stored in 'key_{plain_file}'")
     
-    encryptedFile = open(f"ciphertext_{plain_file}", "w")
-    with open(plaintextFile) as file:
+    encrypted_file = open(f"ciphertext_{plain_file}", "w")
+    with open(plaintext_file) as file:
         for line in file:
             line = line.translate(str.maketrans(alphabet, key))
-        encryptedFile.write(line)
-    print(f"\nEncrypted file created as 'ciphertext_{plaintextFile}'")
+        encrypted_file.write(line)
+    print(f"\nEncrypted file created as 'ciphertext_{plaintext_file}'")
     
-    encryptedFile.close()
-    keyFile.close()
+    encrypted_file.close()
+    key_file.close()
 
 def make_plaintext(rich_text):
     """ Turns a .txt file to a plaintext file
