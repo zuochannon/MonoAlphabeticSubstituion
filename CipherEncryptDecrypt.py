@@ -1,3 +1,31 @@
+"""Textfile Decryptor/Encryptor
+
+This script allows the user to decrypt or encrypt textfiles. It is assumed 
+that if the user wants to decrypt a file, the file is plaintext. 
+
+This tool wants 1 (one) textfile (.txt) from the current directory to 
+decrypt/encrypt.
+
+This script requires Python 3.10 or later.
+
+This file contains the following functions:
+    * decrypt - creates 1 (one) new (.txt) file containing 
+                               decrypted ciphertext
+    * encrypt - creates 2 (two) (.txt) files. 1 (one) 
+                            containing the new ciphertext and 1 (one)
+                            containing the randomly generated key
+    * make_plaintext - creates 1 (one) new plaintext (.txt) file
+    * get_key - asks user for the substitution alphabet
+    * decrypt_or_encrypt - asks user if they want to decrypt/encrypt a 
+                           (.txt) file
+    * get_text_file_name - checks if filename is (.txt) file and in
+                           current directory
+    * main - main function of script
+
+Returns:
+    _type_: _description_
+"""
+
 __author__      = "Channon Zuo"
 __email__       = "01channonzuo@gmail.com"
 __published__   = "02/10/19"
@@ -11,7 +39,18 @@ import random
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 def decrypt(encryptedFile):    
-    # TODO: add body of decrypt(file)
+    """ Decodes an encrypted plaintext .txt file 
+    
+    Calls get_key() to retrieve cipher key
+    
+    Creates .txt file that starts with 'decoded_' and reads from 
+    filename given by parameter. Replaces ciphertext with letters from 
+    key and writes to 'decoded_' .txt file
+    
+    Args:
+        encryptedFile (str): Name of encrypted .txt file
+    """
+    
     key = get_key()
     
     file2 = open(f"decoded_{encryptedFile}", "w")
@@ -23,6 +62,18 @@ def decrypt(encryptedFile):
     print(f"\nDecrypted file created as 'decoded_{encryptedFile}'")     
     
 def encrypt(plain_file):
+    """ Encrypts a plaintext .txt file
+    
+    Calls make_plainttext(filename) to create a plaintext .txt file
+    
+    Creates .txt file that starts with 'ciphertext_'. Generates a random
+    26-character key. Replaces plaintext with letters from the key and 
+    writes to 'ciphertext_' .txt file
+
+    Args:
+        plain_file (str): Name of plaintext .txt file
+    """
+    
     plaintextFile = make_plaintext(plain_file)
     list = random.sample(alphabet, len(alphabet))
     key = ''.join(list)
@@ -41,24 +92,47 @@ def encrypt(plain_file):
     encryptedFile.close()
     keyFile.close()
 
-def make_plaintext(raw_file):
-    plain_file_name = f"plaintext_{raw_file}"
+def make_plaintext(rich_text):
+    """ Turns a .txt file to a plaintext file
+    
+    Creates a plaintext version of the user's .txt file by replacing 
+    uppercase letters with lowercase letters and removing all punctuation.
+    
+    Args:
+        rich_text (str): User's filename input
+
+    Returns:
+        str: Name of newly created .txt file
+    """
+    
+    plain_file_name = f"plaintext_{rich_text}"
     plain = open(plain_file_name, "w")
-    with open(raw_file) as file:
+    with open(rich_text) as file:
         for line in file:
             line = line.lower()
             line = line.translate(str.maketrans('','', string.punctuation))
             plain.write(line)
     plain.close()
     
-    print(f"Plaintext version of .txt file created as 'plaintext_{raw_file}'")
+    print(f"Plaintext version of .txt file created as 'plaintext_{rich_text}'")
     return plain_file_name
 
 def get_key():
+    """ Gets encryption key from user
+    
+    Prompts user to input a 26-character key that acts as the substitution alphabet
+
+    Raises:
+        ValueError: If input is not 26-characters long
+
+    Returns:
+        str: Key for decoding ciphertext
+    """
+    
     more = True
     while(more):
         try:
-            key = input("Paste/Type in your 26 letter key: \n")
+            key = input("Type in your 26 letter key: \n")
             if len(key) != 26:
                 raise ValueError(f"ERROR: Length of '{key}' is {len(key)}. It should be 26 characters long.\n")
             more = False
@@ -68,6 +142,16 @@ def get_key():
     return key
 
 def decrypt_or_encrypt(choice, file):
+    """ 'D' to decrypt, 'E' to encrypt, '!QUIT' to exit program
+
+    Args:
+        choice (str): command
+        file (str): file name
+
+    Raises:
+        ValueError: If input isn't 'D', 'E', or '!QUIT'
+    """
+    
     match choice:
         case 'D': 
             decrypt(file)
@@ -79,6 +163,16 @@ def decrypt_or_encrypt(choice, file):
             raise ValueError(f"ERROR: Command '{choice}' not recognized. Format is capital D or E or !QUIT\n")
             
 def get_text_file_name():
+    """ Makes sure filename is a .txt file and in current directory
+
+    Raises:
+        ValueError: If not a .txt file
+        FileNotFoundError: If file isn't in current directory
+
+    Returns:
+        str: valid filename
+    """
+    
     print("To Exit, type !QUIT")
     file = input("Enter a .txt file to encrypt/decrypt: \n")
     
@@ -93,6 +187,9 @@ def get_text_file_name():
     
     return file
 
+"""
+START OF MAIN METHOD
+"""
 if __name__ == "__main__":
     more = True
     file = ""
