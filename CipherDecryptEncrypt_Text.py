@@ -94,31 +94,30 @@ def get_message():
         quit()
     return message
 
-
+def continue_choice():
+    continue_loop = input("Do you want to continue? Y/N: ")
+    match continue_loop:
+        case 'Y' | 'y':
+            pass
+        case 'N' | 'n':
+            quit()
+        case _:
+            raise ValueError(
+                f"ERROR: Command '{continue_loop}' not recognized. Format is Y or N\n")    
 """
 START OF MAIN METHOD
 """
 if __name__ == "__main__":
     # TODO: Write methods for asking input to be able to repeat certain questions if input is not right
     more = True
+    print("To Exit, type !QUIT")
+    message = get_message()
     while (more):
         print("To Exit, type !QUIT")
-        message = get_message()
         try:
-            choice = input(
-                "Do you want to [D]ecrypt or [E]ncrypt this file?: ")
-            try:
-                decrypt_or_encrypt(choice, message)
-                continue_loop = input("Do you want to continue? Y/N: ")
-                match continue_loop:
-                    case 'Y' | 'y':
-                        continue
-                    case 'N' | 'n':
-                        more = False
-                    case _:
-                        raise ValueError(
-                            f"ERROR: Command '{continue_loop}' not recognized. Format is Y or N\n")
-            except ValueError as e:
-                print(e)
+            choice = input("Do you want to [D]ecrypt or [E]ncrypt this file?: ")
+            decrypt_or_encrypt(choice, message)
+            continue_choice()
         except ValueError as e:
             print(e)
+            continue
